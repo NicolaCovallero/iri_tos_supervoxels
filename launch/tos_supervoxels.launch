@@ -1,6 +1,15 @@
 <launch>
+  <!-- service -->
   <node pkg="iri_tos_supervoxels" type="iri_tos_supervoxels"
    name="iri_tos_supervoxels_alg" output="screen">
-   <param name="test" value="3"/>
+      <param name="seed_resolution" value="0.015"/>
+      <param name="th_points" value="50"/>
   </node>
+
+
+  <!-- client -->
+  <node pkg="iri_tos_supervoxels" type="iri_tos_supervoxels_client"
+   name="iri_tos_supervoxels_alg_client" output="screen">
+  </node>
+
 </launch>

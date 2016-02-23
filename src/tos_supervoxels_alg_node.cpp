@@ -23,12 +23,15 @@ TosSupervoxelsAlgNode::TosSupervoxelsAlgNode(void) :
   this->public_node_handle_.param("zmax",alg_.params.zmax,ZMAX);
   this->public_node_handle_.param("th_points",alg_.params.th_points,TH_POINTS);
 
+  std::string service_name;
+  this->public_node_handle_.param("service_name",service_name,std::string("object_segmentation"));
+
   // [init publishers]
   
   // [init subscribers]
   
   // [init services]
-  this->object_segmentation_server_ = this->public_node_handle_.advertiseService("object_segmentation", &TosSupervoxelsAlgNode::object_segmentationCallback, this);
+  this->object_segmentation_server_ = this->public_node_handle_.advertiseService(service_name, &TosSupervoxelsAlgNode::object_segmentationCallback, this);
   pthread_mutex_init(&this->object_segmentation_mutex_,NULL);
 
   
@@ -73,7 +76,7 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
   pcl::PointCloud<pcl::PointXYZRGBA> cloud;
   pcl::fromROSMsg(req.point_cloud,cloud);
 
-  // initialize the class
+  // initialize the class 
   alg_.init(cloud,alg_.params);
 
   // print parameters

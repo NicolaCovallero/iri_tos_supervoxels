@@ -6,39 +6,31 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_conversions/pcl_conversions.h>
 
-#include "tabletop_object_detection_alg.h"
+#include "tos_supervoxels_alg.h"
 
 // srv
-#include "iri_tabletop_object_detection/iri_tabletop_object_detection_service.h"
-
-// parameters msg
-#include "iri_tabletop_object_detection/parameters.h"
-
-
-iri_tabletop_object_detection::parameters opt;
-bool use_parameters;
+#include "iri_tos_supervoxels/object_segmentation.h"
 
 ros::ServiceClient client;
 ros::Publisher pub;
+std::string service_name;
 
 void callback(const sensor_msgs::PointCloud2 cloud_msg)
 {
   std::cout << "Received point cloud\n";
-  iri_tabletop_object_detection::iri_tabletop_object_detection_service srv;
+  iri_tos_supervoxels::object_segmentation srv;
   srv.request.point_cloud = cloud_msg;
-  srv.request.parameters = opt;
-  srv.request.use_parameters = use_parameters;
 
   if(client.call(srv))
   {
-    //creating new point cloud for debugging
+    //creating new point cloud for debugging with random color for each segmented object
     sensor_msgs::PointCloud2 detected_objects_msg;
     pcl::PointCloud<pcl::PointXYZRGB> detected_objects_cloud;
-    for (int i = 0; i < srv.response.objects.points.size(); ++i)
+    for (int i = 0; i < srv.response.objects.size(); ++i)
     {
       // convert it to pcl
       pcl::PointCloud<pcl::PointXYZRGB> tmp;
-      pcl::fromROSMsg(srv.response.objects.points[i],tmp);
+      pcl::fromROSMsg(srv.response.objects[i],tmp);
 
       //we now construct manually the point cloud
       //choose a random color for the object
@@ -74,83 +66,27 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
     pub.publish(detected_objects_msg);
   }
   else
-    ROS_ERROR("Failed to call service /iri_tabletop_object_detection_alg/detect_tabletop_objects");
+    ROS_ERROR("Failed to call service %s",service_name.c_str());
 
 }
 
 int main(int argc, char **argv)
 {
 
-  ros::init(argc, argv, "tabletop_object_detection_client_node");
+  ros::init(argc, argv, "tos_supervoxels_client_node");
 
   ros::NodeHandle n("~");
   ros::Rate loop_rate(1);
 
-  //supervoxels parameters
-  bool disable_transform;
-  double voxel_resolution;
-  double seed_resolution;
-  double color_importance;
-  double spatial_importance;
-  double normal_importance;
+  std::string input_topic;
+  n.param("service_name",service_name,std::string("/iri_tos_supervoxels_alg/object_segmentation"));
+  n.param("input_topic",input_topic,std::string("/camera/depth/points"));
 
-  // LCCPSegmentation parameters
-  double concavity_tolerance_threshold;
-  double smoothness_threshold;
-  int min_segment_size;
-  bool use_extended_convexity;
-  bool use_sanity_criterion;
-      
-  // Others parameters
-  double zmin;
-  double zmax;
-  int th_points; 
-
-  //parsing the input
-
-  // if the use_parameters variable is set to false the algorithm will works with the default values,
-  // that are the ones defined in its header file and should be the same of the ones
-  // specified in this file.
-  n.param("use_parameters",use_parameters,USE_PARAMETERS);
-
-  n.param("disable_transform",disable_transform,DISABLE_TRANSFORM);
-  n.param("voxel_resolution",voxel_resolution,VOXEL_RESOLUTION);
-  n.param("seed_resolution",seed_resolution,SEED_RESOLUTION);
-  n.param("color_importance",color_importance,COLOR_IMPORTANCE);
-  n.param("spatial_importance",spatial_importance,SPATIAL_IMPORTANCE);
-  n.param("normal_importance",normal_importance,NORMAL_IMPORTANCE);
-
-  n.param("concavity_tolerance_threshold",concavity_tolerance_threshold,CONCAVITY_TOLERANCE_THRESHOLD);
-  n.param("smoothness_threshold",smoothness_threshold,SMOOTHNESS_THRESHOLD);
-  n.param("min_segment_size",min_segment_size,MIN_SEGMENT_SIZE);
-  n.param("use_extended_convexity",use_extended_convexity,USE_EXTENDED_CONVEXITY);
-  n.param("use_sanity_criterion",use_sanity_criterion,USE_SANITY_CRITERION);
-
-  n.param("zmin",zmin,ZMIN);
-  n.param("zmax",zmax,ZMAX);
-  n.param("th_points",th_points,TH_POINTS);
-
-  // building the parameters message
-  opt.disable_transform = disable_transform;
-  opt.voxel_resolution = voxel_resolution;
-  opt.seed_resolution = seed_resolution;
-  opt.color_importance = color_importance;
-  opt.spatial_importance = spatial_importance;
-  opt.normal_importance = normal_importance;
-  opt.concavity_tolerance_threshold = concavity_tolerance_threshold;
-  opt.smoothness_threshold = smoothness_threshold;
-  opt.min_segment_size = min_segment_size;
-  opt.use_extended_convexity = use_extended_convexity;
-  opt.use_sanity_criterion = use_sanity_criterion;
-  opt.zmin = zmin;
-  opt.zmax =  zmax;
-  opt.th_points = th_points; 
-
-  ros::Subscriber sub = n.subscribe<sensor_msgs::PointCloud2>("/camera/depth/points", 1, callback);
+  ros::Subscriber sub = n.subscribe<sensor_msgs::PointCloud2>(input_topic, 1, callback);
 
   pub = n.advertise<sensor_msgs::PointCloud2>("/detected_objects/points", 1);
 
-  client = n.serviceClient<iri_tabletop_object_detection::iri_tabletop_object_detection_service>("/iri_tabletop_object_detection_alg/detect_tabletop_objects");
+  client = n.serviceClient<iri_tos_supervoxels::object_segmentation>(service_name);
 
   while (ros::ok())
   {

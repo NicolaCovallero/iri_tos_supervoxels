@@ -90,6 +90,8 @@ include_directories(${tos_supervoxels_INCLUDE_DIR})
 
 ## Declare a cpp executable
 add_executable(${PROJECT_NAME} src/tos_supervoxels_alg.cpp src/tos_supervoxels_alg_node.cpp)
+add_executable(${PROJECT_NAME}_client src/tos_supervoxels_alg_client_node.cpp)
+
 
 # ******************************************************************** 
 #                   Add the libraries
@@ -97,6 +99,10 @@ add_executable(${PROJECT_NAME} src/tos_supervoxels_alg.cpp src/tos_supervoxels_a
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${tos_supervoxels_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
+
+target_link_libraries(${PROJECT_NAME}_client ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_client ${tos_supervoxels_LIBRARY})
+target_link_libraries(${PROJECT_NAME}_client ${PCL_LIBRARIES})
 
 # ******************************************************************** 
 #               Add message headers dependencies 
