@@ -67,7 +67,7 @@ catkin_package(
 # ******************************************************************** 
 #            Add ROS and IRI ROS run time dependencies
 # ******************************************************************** 
- CATKIN_DEPENDS iri_base_algorithm std_msgs sensor_msgs message_generation
+ CATKIN_DEPENDS iri_base_algorithm std_msgs sensor_msgs message_runtime
 # ******************************************************************** 
 #      Add system and labrobotica run time dependencies here
 # ******************************************************************** 
