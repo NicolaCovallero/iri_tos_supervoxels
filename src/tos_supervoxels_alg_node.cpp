@@ -92,7 +92,7 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
   alg_.reset();
 
   //create msg
-  std::vector<sensor_msgs::PointCloud2> objects_msg;
+  iri_tos_supervoxels::segmented_objects seg_objs_msg;
   for (uint i = 0; i < objects.size(); ++i)
   {
     sensor_msgs::PointCloud2 object_msg;
@@ -100,9 +100,9 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
     object_msg.header.seq = i;
     object_msg.header.frame_id = req.point_cloud.header.frame_id;
     object_msg.header.stamp = ros::Time::now();
-    objects_msg.push_back(object_msg);
+    seg_objs_msg.objects.push_back(object_msg);
   }
-  res.objects = objects_msg; 
+  res.objects = seg_objs_msg; 
 
   //unlock previously blocked shared variables
   this->object_segmentation_mutex_exit();

@@ -31,13 +31,13 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
     sensor_msgs::PointCloud2 detected_objects_msg;
     pcl::PointCloud<pcl::PointXYZRGB> detected_objects_cloud;
 
-    iri_tos_supervoxels::segmented_objects segmented_objects_msg;
+    //iri_tos_supervoxels::segmented_objects segmented_objects_msg;
 
-    for (int i = 0; i < srv.response.objects.size(); ++i)
+    for (int i = 0; i < srv.response.objects.objects.size(); ++i)
     {
       // convert it to pcl
       pcl::PointCloud<pcl::PointXYZRGB> tmp;
-      pcl::fromROSMsg(srv.response.objects[i],tmp);
+      pcl::fromROSMsg(srv.response.objects.objects[i],tmp);
 
       //we now construct manually the point cloud
       //choose a random color for each segmented object
@@ -57,7 +57,7 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
         detected_objects_cloud.points.push_back(temp_point);
       }
 
-      segmented_objects_msg.objects.push_back(srv.response.objects[i]);
+      //segmented_objects_msg.objects.push_back(srv.response.objects[i]);
     }
 
     detected_objects_cloud.width = detected_objects_cloud.points.size();
@@ -74,7 +74,7 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
     //std::cout << "frame of point cloud: " << detected_objects_msg.header.frame_id << "\n";
     pub.publish(detected_objects_msg);
 
-    pub_segmented_objs.publish(segmented_objects_msg);
+    pub_segmented_objs.publish(srv.response.objects);
   }
   else
     ROS_ERROR("Failed to call service %s",service_name.c_str());

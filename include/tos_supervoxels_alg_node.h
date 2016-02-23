@@ -29,6 +29,7 @@
 #include "tos_supervoxels_alg.h"
 #include <pcl_conversions/pcl_conversions.h>
 #include <iri_tos_supervoxels/object_segmentation.h>
+#include <iri_tos_supervoxels/segmented_objects.h>
 
 // [publisher subscriber headers]
 
@@ -68,7 +69,7 @@ class TosSupervoxelsAlgNode : public algorithm_base::IriBaseAlgorithm<TosSupervo
     * Is updated everytime function config_update() is called.
     */
     Config config_;
-    
+
   public:
    /**
     * \brief Constructor
