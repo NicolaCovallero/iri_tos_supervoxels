@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="iri_tos_supervoxels" type="iri_tos_supervoxels"
+   name="iri_tos_supervoxels_alg" output="screen">
+   <param name="test" value="3"/>
+  </node>
+</launch>
