@@ -109,8 +109,6 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
   this->alg_.unlock();
 
   return true;
-
-  return true;
 }
 
 void TosSupervoxelsAlgNode::object_segmentation_mutex_enter(void)
