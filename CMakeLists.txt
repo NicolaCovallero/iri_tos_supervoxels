@@ -27,11 +27,10 @@ ENDIF (PCL_FOUND)
 #           Add topic, service and action definition here
 # ******************************************************************** 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+   FILES
+   segmented_objects.msg
+)
 
 ## Generate services in the 'srv' folder
 add_service_files(

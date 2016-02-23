@@ -11,8 +11,11 @@
 // srv
 #include "iri_tos_supervoxels/object_segmentation.h"
 
+// msg
+#include "iri_tos_supervoxels/segmented_objects.h"
+
 ros::ServiceClient client;
-ros::Publisher pub;
+ros::Publisher pub,pub_segmented_objs;
 std::string service_name;
 
 void callback(const sensor_msgs::PointCloud2 cloud_msg)
@@ -27,6 +30,9 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
     //creating new point cloud for debugging with random color for each segmented object
     sensor_msgs::PointCloud2 detected_objects_msg;
     pcl::PointCloud<pcl::PointXYZRGB> detected_objects_cloud;
+
+    iri_tos_supervoxels::segmented_objects segmented_objects_msg;
+
     for (int i = 0; i < srv.response.objects.size(); ++i)
     {
       // convert it to pcl
@@ -50,6 +56,8 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
         temp_point.b = b*255;
         detected_objects_cloud.points.push_back(temp_point);
       }
+
+      segmented_objects_msg.objects.push_back(srv.response.objects[i]);
     }
 
     detected_objects_cloud.width = detected_objects_cloud.points.size();
@@ -65,6 +73,8 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
     detected_objects_msg.header.stamp = ros::Time::now();
     //std::cout << "frame of point cloud: " << detected_objects_msg.header.frame_id << "\n";
     pub.publish(detected_objects_msg);
+
+    pub_segmented_objs.publish(segmented_objects_msg);
   }
   else
     ROS_ERROR("Failed to call service %s",service_name.c_str());
@@ -85,7 +95,8 @@ int main(int argc, char **argv)
 
   ros::Subscriber sub = n.subscribe<sensor_msgs::PointCloud2>(input_topic, 1, callback);
 
-  pub = n.advertise<sensor_msgs::PointCloud2>("/detected_objects/points", 1);
+  pub = n.advertise<sensor_msgs::PointCloud2>("/segmented_objects/points", 1);
+  pub_segmented_objs = n.advertise<iri_tos_supervoxels::segmented_objects>("/segmented_objects",1);
 
   client = n.serviceClient<iri_tos_supervoxels::object_segmentation>(service_name);
 
