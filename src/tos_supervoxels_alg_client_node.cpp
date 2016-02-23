@@ -21,6 +21,7 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
   iri_tos_supervoxels::object_segmentation srv;
   srv.request.point_cloud = cloud_msg;
 
+  // call the service to segment the table otp objects
   if(client.call(srv))
   {
     //creating new point cloud for debugging with random color for each segmented object
@@ -33,7 +34,7 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
       pcl::fromROSMsg(srv.response.objects[i],tmp);
 
       //we now construct manually the point cloud
-      //choose a random color for the object
+      //choose a random color for each segmented object
       float r,g,b;
       r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
       g = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -55,14 +56,14 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
     detected_objects_cloud.height = 1;
     detected_objects_cloud.is_dense = true;
 
-    std::cout << "detected_objects_cloud.points.size() " << detected_objects_cloud.points.size() << "\n";
+    //std::cout << "detected_objects_cloud.points.size() " << detected_objects_cloud.points.size() << "\n";
     pcl::toROSMsg(detected_objects_cloud,detected_objects_msg);
-    std::cout << "detected_objects_msg.data.size() " << detected_objects_msg.data.size() << "\n";
+    //std::cout << "detected_objects_msg.data.size() " << detected_objects_msg.data.size() << "\n";
 
     detected_objects_msg.header.seq = 1;
     detected_objects_msg.header.frame_id = cloud_msg.header.frame_id;
     detected_objects_msg.header.stamp = ros::Time::now();
-    std::cout << "frame of point cloud: " << detected_objects_msg.header.frame_id << "\n";
+    //std::cout << "frame of point cloud: " << detected_objects_msg.header.frame_id << "\n";
     pub.publish(detected_objects_msg);
   }
   else

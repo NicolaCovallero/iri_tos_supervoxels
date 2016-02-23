@@ -6,6 +6,7 @@ TosSupervoxelsAlgNode::TosSupervoxelsAlgNode(void) :
   //init class attributes if necessary
   this->loop_rate_ = 10;//in [Hz]
 
+  // initialize class parameters
   this->public_node_handle_.param("disable_transform",alg_.params.disable_transform,DISABLE_TRANSFORM);
   this->public_node_handle_.param("voxel_resolution",alg_.params.voxel_resolution,VOXEL_RESOLUTION);
   this->public_node_handle_.param("seed_resolution",alg_.params.seed_resolution,SEED_RESOLUTION);

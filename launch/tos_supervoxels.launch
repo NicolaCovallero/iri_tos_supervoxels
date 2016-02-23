@@ -4,12 +4,15 @@
    name="iri_tos_supervoxels_alg" output="screen">
       <param name="seed_resolution" value="0.015"/>
       <param name="th_points" value="50"/>
+      <param name="service_name" value="object_segmentation"/>
   </node>
 
 
   <!-- client -->
   <node pkg="iri_tos_supervoxels" type="iri_tos_supervoxels_client"
    name="iri_tos_supervoxels_alg_client" output="screen">
+   <param name="input_topic" value="/camera/depth/points"/>
+   <param name="service_name" value="/iri_tos_supervoxels_alg/object_segmentation"/>
   </node>
 
 </launch>

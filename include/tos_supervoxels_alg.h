@@ -54,9 +54,10 @@ const bool USE_PARAMETERS = false;
 //-------------------
 
 /**
- * \brief IRI ROS Specific Driver Class
+ * \brief IRI ROS Specific Driver Class - Tabletop Object Segmentation by Supervoxels convexity
  *
- *
+ * Class to segmented tabletop objects, the table has to be
+ * the bigger plane in the scene. 
  */
 class TosSupervoxelsAlgorithm
 {
@@ -168,14 +169,6 @@ class TosSupervoxelsAlgorithm
     void init(pcl::PointCloud<pcl::PointXYZRGBA> input_cloud,
               tos_supervoxels_parameters &opt);
 
-    /*! \brief Class initializer
-    *
-    * \param input_cloud input cloud to segment 
-    * \param opt parameters for the algorithm 
-    */
-    //void init(pcl::PointCloud<pcl::PointXYZRGBA> input_cloud,
-              //    iri_tos_supervoxels::parameters &opt);
-
     /*! \brief Class initializer, with default parameters
     *
     * \param input_cloud input cloud to segment 
@@ -195,19 +188,15 @@ class TosSupervoxelsAlgorithm
     */  
     tos_supervoxels_parameters get_default_parameters(); 
 
-    /*! \brief get the default parameters of the algorithm in the message format
-    */
-    //iri_tos_supervoxels::parameters get_default_parameters_msg();
-
     /*! \brief Detect and segment the objects on the table
     */
     void segment();
 
-    /*! \brief Get the detected objects as a vector of the variable Object
+    /*! \brief Get the segmented objects as a vector of the variable Object
     */
     std::vector<Object> get_segmented_objects();
 
-    /*! \brief Get the detected objects as a vector of point clouds
+    /*! \brief Get the segmented objects as a vector of point clouds
     */
     std::vector<pcl::PointCloud<pcl::PointXYZRGBA> > get_segmented_objects_simple();
 
@@ -230,6 +219,8 @@ class TosSupervoxelsAlgorithm
     /*! \brief returns normals point cloud of the supervoxels
     */
     pcl::PointCloud<pcl::PointNormal> get_sv_normal_cloud();
+
+    // functions to set and get the parameters of the algorithm
 
     void set_disable_transform(bool disable_transform_in);
     void set_voxel_resolution(double voxel_resolution_in);

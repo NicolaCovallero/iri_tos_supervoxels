@@ -32,29 +32,6 @@ void TosSupervoxelsAlgorithm::init(pcl::PointCloud<pcl::PointXYZRGBA> input_clou
   this->obj_segment.init(input_cloud);
 }
 
-/*void TosSupervoxelsAlgorithm::init(pcl::PointCloud<pcl::PointXYZRGBA> input_cloud,
-          iri_tos_supervoxels::parameters &opt)
-{
-  this->obj_segment.init(input_cloud);
-
-  this->obj_segment.set_disable_transform(opt.disable_transform);
-  this->obj_segment.set_voxel_resolution(opt.voxel_resolution);
-  this->obj_segment.set_seed_resolution(opt.seed_resolution);
-  this->obj_segment.set_color_importance(opt.color_importance);
-  this->obj_segment.set_spatial_importance(opt.spatial_importance);
-  this->obj_segment.set_normal_importance(opt.normal_importance);  
-
-  this->obj_segment.set_concavity_tolerance_threshold(opt.concavity_tolerance_threshold);
-  this->obj_segment.set_smoothness_threshold(opt.smoothness_threshold);
-  this->obj_segment.set_min_segment_size(opt.min_segment_size);
-  this->obj_segment.set_use_extended_convexity(opt.use_extended_convexity);
-  this->obj_segment.set_use_sanity_criterion(opt.use_sanity_criterion);
- 
-  this->obj_segment.set_zmin(opt.zmin);
-  this->obj_segment.set_zmax(opt.zmax);
-  this->obj_segment.set_th_points(opt.th_points);
-}*/
-
 void TosSupervoxelsAlgorithm::reset()
 {
   this->obj_segment.reset();
@@ -65,40 +42,10 @@ pcl::PointCloud<pcl::PointXYZRGBA>::Ptr TosSupervoxelsAlgorithm::get_input_cloud
   return this->obj_segment.get_input_cloud();
 }
 
-
 tos_supervoxels_parameters TosSupervoxelsAlgorithm::get_default_parameters()
 {
   return this->obj_segment.get_default_parameters();
 }
-
-/*iri_tos_supervoxels::parameters TosSupervoxelsAlgorithm::get_default_parameters_msg()
-{
-  iri_tos_supervoxels::parameters p;
-  
-  tos_supervoxels_parameters opt = this->obj_segment.get_default_parameters();
-
-  p.disable_transform = opt.disable_transform;
-  p.voxel_resolution = opt.voxel_resolution;
-  p.seed_resolution = opt.seed_resolution;
-  p.color_importance = opt.color_importance;
-  p.spatial_importance = opt.spatial_importance;
-  p.normal_importance = opt.normal_importance;
-
-  // LCCPSegmentation Stuff
-  p.concavity_tolerance_threshold = opt.concavity_tolerance_threshold;
-  p.smoothness_threshold = opt.smoothness_threshold;
-  p.min_segment_size = opt.min_segment_size; 
-  p.use_extended_convexity = opt.use_extended_convexity;
-  p.use_sanity_criterion = opt.use_sanity_criterion;
-
-  p.zmin = opt.zmin;//meters
-  p.zmax = opt.zmax;//meters
-
-  p.th_points = opt.th_points;
-
-  return p;
-}*/
-
 
 void TosSupervoxelsAlgorithm::segment()
 {
