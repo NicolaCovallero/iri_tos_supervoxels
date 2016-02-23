@@ -28,8 +28,8 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
   if(client.call(srv))
   {
     //creating new point cloud for debugging with random color for each segmented object
-    sensor_msgs::PointCloud2 detected_objects_msg;
-    pcl::PointCloud<pcl::PointXYZRGB> detected_objects_cloud;
+    sensor_msgs::PointCloud2 segmented_objects_msg;
+    pcl::PointCloud<pcl::PointXYZRGB> segmented_objects_cloud;
 
     //iri_tos_supervoxels::segmented_objects segmented_objects_msg;
 
@@ -54,25 +54,25 @@ void callback(const sensor_msgs::PointCloud2 cloud_msg)
         temp_point.r = r*255;
         temp_point.g = g*255;
         temp_point.b = b*255;
-        detected_objects_cloud.points.push_back(temp_point);
+        segmented_objects_cloud.points.push_back(temp_point);
       }
 
       //segmented_objects_msg.objects.push_back(srv.response.objects[i]);
     }
 
-    detected_objects_cloud.width = detected_objects_cloud.points.size();
-    detected_objects_cloud.height = 1;
-    detected_objects_cloud.is_dense = true;
+    segmented_objects_cloud.width = segmented_objects_cloud.points.size();
+    segmented_objects_cloud.height = 1;
+    segmented_objects_cloud.is_dense = true;
 
-    //std::cout << "detected_objects_cloud.points.size() " << detected_objects_cloud.points.size() << "\n";
-    pcl::toROSMsg(detected_objects_cloud,detected_objects_msg);
-    //std::cout << "detected_objects_msg.data.size() " << detected_objects_msg.data.size() << "\n";
+    //std::cout << "segmented_objects_cloud.points.size() " << segmented_objects_cloud.points.size() << "\n";
+    pcl::toROSMsg(segmented_objects_cloud,segmented_objects_msg);
+    //std::cout << "segmented_objects_msg.data.size() " << segmented_objects_msg.data.size() << "\n";
 
-    detected_objects_msg.header.seq = 1;
-    detected_objects_msg.header.frame_id = cloud_msg.header.frame_id;
-    detected_objects_msg.header.stamp = ros::Time::now();
-    //std::cout << "frame of point cloud: " << detected_objects_msg.header.frame_id << "\n";
-    pub.publish(detected_objects_msg);
+    segmented_objects_msg.header.seq = 1;
+    segmented_objects_msg.header.frame_id = cloud_msg.header.frame_id;
+    segmented_objects_msg.header.stamp = ros::Time::now();
+    //std::cout << "frame of point cloud: " << segmented_objects_msg.header.frame_id << "\n";
+    pub.publish(segmented_objects_msg);
 
     pub_segmented_objs.publish(srv.response.objects);
   }
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 
   std::string input_topic;
   n.param("service_name",service_name,std::string("/iri_tos_supervoxels_alg/object_segmentation"));
-  n.param("input_topic",input_topic,std::string("/camera/depth/points"));
+  n.param("input_topic",input_topic,std::string("/camera/depth_registered/points"));
 
   ros::Subscriber sub = n.subscribe<sensor_msgs::PointCloud2>(input_topic, 1, callback);
 
