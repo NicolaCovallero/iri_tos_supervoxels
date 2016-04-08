@@ -255,6 +255,9 @@ class TosSupervoxelsAlgorithm
     double get_zmin();
     double get_zmax();
     int get_th_points();
+
+    pcl::ModelCoefficients get_plane_coefficients();
+
 };
 
 #endif

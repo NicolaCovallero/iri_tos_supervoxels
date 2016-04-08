@@ -13,6 +13,7 @@
 
 // msg
 #include "iri_tos_supervoxels/segmented_objects.h"
+#include "iri_tos_supervoxels/plane_coefficients.h"
 
 ros::ServiceClient client;
 ros::Publisher pub,pub_segmented_objs;

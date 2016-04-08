@@ -227,4 +227,10 @@ int TosSupervoxelsAlgorithm::get_th_points()
   return this->obj_segment.get_th_points();
 }
 
+pcl::ModelCoefficients TosSupervoxelsAlgorithm::get_plane_coefficients()
+{
+  return this->obj_segment.get_plane_coefficients();
+}
+
+
 // TosSupervoxelsAlgorithm Public API

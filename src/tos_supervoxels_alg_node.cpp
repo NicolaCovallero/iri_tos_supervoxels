@@ -88,6 +88,14 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
   std::vector<pcl::PointCloud<pcl::PointXYZRGBA> > objects;
   objects = alg_.get_segmented_objects_simple();
   
+  //fill the plane coefficients field
+  pcl::ModelCoefficients plane_coefficients;
+  plane_coefficients = alg_.get_plane_coefficients();
+  res.plane_coeff.a = plane_coefficients.values[0];
+  res.plane_coeff.b = plane_coefficients.values[1];
+  res.plane_coeff.c = plane_coefficients.values[2];
+  res.plane_coeff.d = plane_coefficients.values[3];
+
   // free the memory of the algorithm
   alg_.reset();
 
@@ -103,6 +111,8 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
     seg_objs_msg.objects.push_back(object_msg);
   }
   res.objects = seg_objs_msg; 
+
+
 
   //unlock previously blocked shared variables
   this->object_segmentation_mutex_exit();

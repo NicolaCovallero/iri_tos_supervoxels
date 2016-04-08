@@ -30,6 +30,7 @@ ENDIF (PCL_FOUND)
 add_message_files(
    FILES
    segmented_objects.msg
+   plane_coefficients.msg
 )
 
 ## Generate services in the 'srv' folder

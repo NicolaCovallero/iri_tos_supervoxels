@@ -30,6 +30,8 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <iri_tos_supervoxels/object_segmentation.h>
 #include <iri_tos_supervoxels/segmented_objects.h>
+#include <iri_tos_supervoxels/plane_coefficients.h>
+
 
 // [publisher subscriber headers]
 
