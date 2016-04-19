@@ -97,7 +97,7 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
   res.plane_coeff.d = plane_coefficients.values[3];
 
   // free the memory of the algorithm
-  alg_.reset();
+  // alg_.reset();
 
   //create msg
   iri_tos_supervoxels::segmented_objects seg_objs_msg;
@@ -139,7 +139,39 @@ void TosSupervoxelsAlgNode::object_segmentation_mutex_exit(void)
 void TosSupervoxelsAlgNode::node_config_update(Config &config, uint32_t level)
 {
   this->alg_.lock();
-  this->config_=config;
+  //this->config_=config;
+
+  alg_.params.disable_transform = config.disable_transform;
+  alg_.params.voxel_resolution = config.voxel_resolution;
+  alg_.params.seed_resolution = config.seed_resolution;
+  alg_.params.color_importance = config.color_importance;
+  alg_.params.spatial_importance = config.spatial_importance;
+  alg_.params.normal_importance = config.normal_importance;
+  // this->alg_.set_disable_transform(config.disable_transform);
+  // this->alg_.set_voxel_resolution(config.voxel_resolution);
+  // this->alg_.set_seed_resolution(config.seed_resolution);
+  // this->alg_.set_color_importance(config.color_importance);
+  // this->alg_.set_spatial_importance(config.spatial_importance);
+  // this->alg_.set_normal_importance(config.normal_importance);
+
+  alg_.params.concavity_tolerance_threshold = config.concavity_tolerance_threshold;
+  alg_.params.smoothness_threshold = config.smoothness_threshold;
+  alg_.params.min_segment_size = config.min_segment_size;
+  alg_.params.use_extended_convexity = config.use_extended_convexity;
+  alg_.params.use_sanity_criterion = config.use_sanity_criterion;
+  // this->alg_.set_concavity_tolerance_threshold(config.concavity_tolerance_threshold);
+  // this->alg_.set_smoothness_threshold(config.smoothness_threshold);
+  // this->alg_.set_min_segment_size(config.min_segment_size);
+  // this->alg_.set_use_extended_convexity(config.use_extended_convexity);
+  // this->alg_.set_use_sanity_criterion(config.use_sanity_criterion);
+
+  alg_.params.zmin = config.zmin;
+  alg_.params.zmax = config.zmax;
+  alg_.params.th_points = config.th_points;
+  // this->alg_.set_zmin(config.zmin);
+  // this->alg_.set_zmax(config.zmax);
+  // this->alg_.set_th_points(config.th_points);
+
   this->alg_.unlock();
 }
 
