@@ -84,9 +84,16 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
   alg_.print_parameters();
 
   // segment tabletop objects
-  alg_.segment();
   std::vector<pcl::PointCloud<pcl::PointXYZRGBA> > objects;
-  objects = alg_.get_segmented_objects_simple();
+  if(alg_.segment()) // true if there are objects on the table
+    objects = alg_.get_segmented_objects_simple();
+  else
+  {
+    //unlock previously blocked shared variables
+    this->object_segmentation_mutex_exit();
+    this->alg_.unlock();
+    return true;
+  }
   
   //fill the plane coefficients field
   pcl::ModelCoefficients plane_coefficients;

@@ -47,9 +47,9 @@ tos_supervoxels_parameters TosSupervoxelsAlgorithm::get_default_parameters()
   return this->obj_segment.get_default_parameters();
 }
 
-void TosSupervoxelsAlgorithm::segment()
+bool TosSupervoxelsAlgorithm::segment()
 {
-  this->obj_segment.segment();
+  return this->obj_segment.segment();
 }
 
 std::vector<Object> TosSupervoxelsAlgorithm::get_segmented_objects()

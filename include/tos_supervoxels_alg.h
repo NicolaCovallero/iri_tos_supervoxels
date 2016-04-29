@@ -189,8 +189,9 @@ class TosSupervoxelsAlgorithm
     tos_supervoxels_parameters get_default_parameters(); 
 
     /*! \brief Detect and segment the objects on the table
+    * \details Returns true if there is at  least 1 object segmented.
     */
-    void segment();
+    bool segment();
 
     /*! \brief Get the segmented objects as a vector of the variable Object
     */
