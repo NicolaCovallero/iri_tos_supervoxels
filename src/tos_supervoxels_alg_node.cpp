@@ -119,7 +119,8 @@ bool TosSupervoxelsAlgNode::object_segmentationCallback(iri_tos_supervoxels::obj
   }
   res.objects = seg_objs_msg; 
 
-
+  // get the table point cloud
+  pcl::toROSMsg(*(this->alg_.get_plane_cloud()),res.plane_cloud);
 
   //unlock previously blocked shared variables
   this->object_segmentation_mutex_exit();

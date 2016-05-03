@@ -62,6 +62,11 @@ std::vector<pcl::PointCloud<pcl::PointXYZRGBA> > TosSupervoxelsAlgorithm::get_se
   return this->obj_segment.get_segmented_objects_simple();
 }
 
+pcl::PointCloud<pcl::PointXYZRGBA>::Ptr TosSupervoxelsAlgorithm::get_plane_cloud()
+{
+  return this->obj_segment.get_plane_cloud();
+}
+
 void TosSupervoxelsAlgorithm::print_parameters()
 {
   this->obj_segment.print_parameters();

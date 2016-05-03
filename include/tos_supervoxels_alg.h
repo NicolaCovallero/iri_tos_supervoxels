@@ -201,6 +201,8 @@ class TosSupervoxelsAlgorithm
     */
     std::vector<pcl::PointCloud<pcl::PointXYZRGBA> > get_segmented_objects_simple();
 
+    pcl::PointCloud<pcl::PointXYZRGBA>::Ptr get_plane_cloud();
+
     /*! \brief Print the parameters of the algorithm in the shell
     */
     void print_parameters();

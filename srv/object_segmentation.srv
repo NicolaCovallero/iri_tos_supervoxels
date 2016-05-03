@@ -2,3 +2,4 @@ sensor_msgs/PointCloud2 point_cloud
 ---
 iri_tos_supervoxels/segmented_objects objects
 iri_tos_supervoxels/plane_coefficients plane_coeff
+sensor_msgs/PointCloud2 plane_cloud
